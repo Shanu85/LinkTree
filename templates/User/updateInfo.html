@@ -1,0 +1,100 @@
+{% extends "/User/index.html" %}
+
+{% block content %}
+<section class="h-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+          <div class="card">
+            <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+              <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
+                <button type="button"  class="btn btn-danger me-2" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop{{user.id}}"style="z-index: 1;">
+                  Edit profile
+                </button>
+              </div>
+
+              <div class="ms-3" style="margin-top: 130px;">
+                <h5>{{user.username}}</h5>
+              </div>
+            </div>
+            <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                <div class="d-flex justify-content-end text-center py-1">
+                  <div>
+                    <p class="mb-1 h5">{{totalURL}}</p>
+                    <p class="small text-muted mb-0">Total URL</p>
+                  </div>
+                </div>
+              </div>
+            <div class="card-body p-4 text-black">
+              <div class="mb-5">
+                <p class="lead fw-normal mb-1">About</p>
+                <div class="p-4" style="background-color: #f8f9fa;">
+                    <p class="font-italic mb-1">{{about}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+              class="modal fade"
+              id="staticBackdrop{{user.id}}"
+              data-mdb-backdrop="static"
+              data-mdb-keyboard="false"
+              tabindex="-1"
+              role="alert"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: red;">Update</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+                    <form class="mx-1 mx-md-4" action="{{url_for('user.updateInfo')}}" method="post">
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="text" id="form3Example4c" class="form-control" name="username" value="{{user.username if user.username}}"/>
+                        <label class="form-label" for="form3Example4c">Name</label>
+                      </div>
+                    </div>
+                    
+                    
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="password" id="form3Example4c" class="form-control" name="password" value="{{user.pwhash if user.pwhash}}"/>
+                        <label class="form-label" for="form3Example4c">Password</label>
+                      </div>
+                    </div>
+                    
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="text" id="form3Example4c" class="form-control" name="about" value="{{about if about}}"/>
+                        <label class="form-label" for="form3Example4c">About</label>
+                      </div>
+                    </div>
+                    
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <button type="submit" class="btn btn-danger me-2">Update</button>
+                        </div>
+                    </div>
+                    
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+  </section>
+{% endblock %}

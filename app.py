@@ -1,7 +1,8 @@
 from flask import Flask,render_template,url_for,session,redirect,request,flash
-from models import db,User,bcrypt,load_db
+from models import db,User,bcrypt,load_db,About,URL
 from user import user
 from flask_login import LoginManager, login_user,login_required,current_user,logout_user
+
 
 app=Flask(__name__)
 bcrypt.init_app(app)
@@ -24,6 +25,16 @@ def load_user(id):
 def index():
     return render_template('index.html')
 
+@app.route('/display/<int:url_id>',methods=['GET', 'POST'])
+def display(url_id):
+   
+    user_data=User.query.filter_by(id=url_id).one()
+    
+    data=URL.query.filter_by(email=user_data.email).all()
+
+    userName=User.query.filter_by(email=user_data.email).one().username
+    return render_template('display.html',data=data,username=userName)
+
 @login_required
 @app.route('/logout')
 def logout():
@@ -32,6 +43,7 @@ def logout():
         return redirect('/')
     else:
         return redirect('/Login')
+
 
 @app.route('/SignUp',methods=['GET', 'POST'])
 def SignUp():
@@ -44,13 +56,16 @@ def SignUp():
             user = User.query.filter_by(email=email).first()
             if user:
                 flash('Email addess already exists.')
-                return redirect('/SignUp')
+                return redirect('/Login')
 
             user=User(email, username, password)
-            
+            about=About(email,"About Me")
+
             db.session.add(user)
+            db.session.add(about)
+
             db.session.commit()
-            return render_template('login.html')
+            return redirect('/user')
 
         return render_template('register.html')
     else:

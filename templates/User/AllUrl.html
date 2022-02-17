@@ -1,59 +1,97 @@
 {% extends "/User/index.html" %}
 
 {% block content %}
-<section class="vh-100" style="background-color: #9de2ff;">
+
+<script>
+  var user_id="{{user.id}}"
+  var website_url=window.location.href
+  
+  var urlLink = website_url.substring(0,website_url.length-5)+"display/"+user_id;
+
+  window.onload = function()
+  {
+    document.getElementById("url_label").innerHTML=urlLink;
+  }
+
+  async function copy()
+  {
+    const content=document.getElementById('url_label').textContent;
+      console.log(content);
+      await navigator.clipboard.writeText(content)
+
+      alert("Copied!")
+  }
+  </script>
+
+<section class="vh-100" style="background-color: #9de2ff;" >
     <div class="row d-flex justify-content-center align-items-center" >
         <div class="row row-md-9 col-lg-7 row-xl-5" style="margin-top: 50px;">
-
+        
+          <div class="d-flex justify-content-center">
             <div class="d-flex pt-1" style="margin-bottom: 20px;">
-                <button type="button" class="btn btn-success btn-lg " type="submit"><a  href="/user/add"style="text-decoration: none; color:white">Add</a></button>
-              </div>
-
-          <div class="card" style="border-radius: 15px;">
-            <div class="card-body p-4">
-              <div class="d-flex text-black">
-                <div class="flex-grow-1 ms-5">
-                    <h5 class="mb-1">URL Name</h5>
-                    <p class="mb-2 pb-1" style="color: #2b2a2a;">https://gaana.com/</p>
-                    <div class="d-flex pt-1">
-                        <button type="button" class="btn btn-outline-primary " style="margin-right: 100px;"><a  href="/user/edit"style="text-decoration: none;">Edit</a></button>
-                        <button type="button"  class="btn btn-danger me-2" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop">
-                          Delete
-                        </button>
-                        
-                      </div>
-                </div>
-               
-              </div>
+              <button type="button" class="btn btn-success btn-lg " type="submit"><a  href="/user/add"style="text-decoration: none; color:white">Add</a></button>
+            </div>
+            <div class="d-flex justify-content-center" >
+              <label style="margin-left: 20px; margin-right:20px;">
+                <label class="form-label" for="displayInfo" id="url_label">URL Link</label>
+              </label>
+            </div>
+            
+            <div class="d-flex pt-1" style="margin-bottom: 20px; margin-left:20px;">
+              <button type="button" class="btn btn-success btn-lg " type="submit" onclick="copy()" style="cursor: pointer;">Share</button>
             </div>
           </div>
-        </div>
+            
 
+              {% for row in data %}
+              <div class="card" style="border-radius: 15px; margin-Top: 20px;">
+                <div class="card-body p-4">
+                  <div class="d-flex text-black">
+                    <div class="flex-grow-1 ms-5">
+                        <h5 class="mb-1">{{row.url_name}}</h5>
+                        <p class="mb-2 pb-1" style="color: #2b2a2a;">{{row.url_link}}</p>
+                        <div class="d-flex pt-1">
+                            <button type="button" class="btn btn-outline-primary " style="margin-right: 100px;"><a  href="{{url_for('user.edit',url_id=row.id)}}"style="text-decoration: none;">Edit</a></button>
+                            <button type="button"  class="btn btn-danger me-2" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop{{row.id}}">
+                              Delete
+                            </button>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+              class="modal fade"
+              id="staticBackdrop{{row.id}}"
+              data-mdb-backdrop="static"
+              data-mdb-keyboard="false"
+              tabindex="-1"
+              role="alert"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: red;">Delete</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">Once you delete you will not be able to recover it. Still do you want to delete it ?</div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger me-2"><a  href="{{url_for('user.deleteURL',url_id=row.id)}}" style="text-decoration: none; color:white">Sure</a></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+              {% endfor %}
+        </div>
       </div>
   </section>
-
-  <div
-  class="modal fade"
-  id="staticBackdrop"
-  data-mdb-backdrop="static"
-  data-mdb-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel" style="color: red;">Delete</h5>
-        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">Once you delete you will not be able to recover it. Still do you want to delete it ?</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger me-2"><a  href="/user/deleteURL"style="text-decoration: none; color:white">Sure</a></button>
-      </div>
-    </div>
-  </div>
-</div>
+  
+ 
 
 {% endblock %}

@@ -16,6 +16,15 @@ class URL(db.Model):
         self.url_name=url_name
         self.url_link=url_link
 
+class About(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    email=db.Column(db.String(200),nullable=False)
+    about=db.Column(db.String(1000),nullable=False)
+    def __init__(self, email,about):
+        """Constructor"""
+        self.email=email
+        self.about=about
+
 class User(UserMixin,db.Model):
     id=db.Column(db.Integer,primary_key=True)
     email=db.Column(db.String(200),nullable=False,unique=True)
@@ -32,11 +41,13 @@ class User(UserMixin,db.Model):
         return bcrypt.check_password_hash(self.pwhash, password_in)
         
 def load_db(db):
-    db.drop_all()
-    db.create_all()
-    db.session.add_all([User('user1@gmail.com',"123" ,'xxxx'),
-                        User('user2@gmail.com',"134", 'yyyy')])  
+    # db.drop_all()
+    # db.create_all()
+    # db.session.add_all([User('user1@gmail.com',"123" ,'xxxx'),
+    #                     User('user2@gmail.com',"134", 'yyyy')])  
 
-    db.session.add_all([URL('user1@gmail.com',"gaana" ,'https://gaana.com/'),
-                        URL('user2@gmail.com',"youtube", 'https://www.youtube.com/')]) 
-    db.session.commit()
+    # db.session.add_all([URL('user1@gmail.com',"gaana" ,'https://gaana.com/'),
+    #                     URL('user2@gmail.com',"youtube", 'https://www.youtube.com/')]) 
+    # db.session.commit()
+    
+    print("-----------------UnCommit this--------------------")
