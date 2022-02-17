@@ -42,8 +42,9 @@ def updateInfo():
 
             newuser=User(email,name,password)
 
-            User.query.filter_by(id=current_user.id).update({'email':email,'username':name,'pwhash':newuser.pwhash})
-            About.query.filter_by(id=current_user.id).update({'email':email,'about':about})
+            User.query.filter_by(email=current_user.email).update({'email':email,'username':name,'pwhash':newuser.pwhash})
+            About.query.filter_by(email=current_user.email).update({'email':email,'about':about})
+
             db.session.commit()
 
         return redirect('/user')
